@@ -1,11 +1,23 @@
 import './style'
 import { Component } from 'preact'
+import State from './State'
+import {
+  Canvas
+} from './components'
 
+@State
 export default class App extends Component {
-  render () {
+  render ({
+    drawing,
+    prevX,
+    prevY,
+    // -- handlers --
+    toggleDrawing,
+    setPrevCoord
+  }) {
     return (
       <div>
-        <h1>Hello, World!</h1>
+        <Canvas {...{drawing, prevX, prevY, toggleDrawing, setPrevCoord}} />
       </div>
     )
   }
