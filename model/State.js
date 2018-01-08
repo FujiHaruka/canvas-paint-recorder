@@ -7,13 +7,16 @@ const Canvas = withStateHandlers(
     drawing: false,
     prevX: 0,
     prevY: 0,
-    clearStarted: false
+    clearing: false,
+    recording: false
   }),
   {
     toggleDrawing: updater('drawing'),
     setPrevCoord: (state) => ({x, y}) => ({prevX: x, prevY: y}),
-    clearStart: (state) => () => ({clearStarted: true}),
-    clearDone: (state) => () => ({clearStarted: false})
+    clearStart: (state) => () => ({clearing: true}),
+    clearDone: (state) => () => ({clearing: false}),
+    recordStart: (state) => () => ({recording: true}),
+    recordFinish: (state) => () => ({recording: false})
   }
 )
 

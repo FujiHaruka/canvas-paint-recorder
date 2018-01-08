@@ -14,17 +14,20 @@ export default class App extends Component {
     drawing,
     prevX,
     prevY,
-    clearStarted,
+    clearing,
+    recording,
     // -- handlers --
     toggleDrawing,
     setPrevCoord,
     clearStart,
-    clearDone
+    clearDone,
+    recordStart,
+    recordFinish
   }) {
     return (
       <div class='App'>
-        <PaintToolbar {...{clearStart}} />
-        <Canvas {...{drawing, prevX, prevY, toggleDrawing, setPrevCoord, clearStarted, clearDone}} />
+        <PaintToolbar {...{clearStart, recordStart, recording, recordFinish}} />
+        <Canvas {...{drawing, prevX, prevY, toggleDrawing, setPrevCoord, clearing, clearDone, recording}} />
       </div>
     )
   }
