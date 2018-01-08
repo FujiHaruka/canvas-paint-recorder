@@ -1,12 +1,13 @@
 import './style'
 import 'preact-material-components/Button/style.css'
 import 'preact-material-components/Toolbar/style.css'
-import { Component } from 'preact'
+import {Component} from 'preact'
 import State from './model/State'
 import {
   Header,
   PaintToolbar,
-  Canvas
+  Canvas,
+  NotSupportedMessage
 } from './components'
 
 @State
@@ -19,6 +20,7 @@ export default class App extends Component {
     canvasHeight,
     clearing,
     recording,
+    isMediaRecorderSupported,
     // -- handlers --
     toggleDrawing,
     setPrevCoord,
@@ -32,10 +34,12 @@ export default class App extends Component {
       <div class='App'>
         <Header />
         <div class='App-main'>
+          <NotSupportedMessage enabled={!isMediaRecorderSupported} />
           <PaintToolbar {...{
             clearStart,
             recordStart,
             recording,
+            isMediaRecorderSupported,
             recordFinish
           }} />
           <Canvas {...{
@@ -54,5 +58,11 @@ export default class App extends Component {
         </div>
       </div>
     )
+  }
+
+  componentDidMount () {
+    if (!window.MediaRecorder) {
+      this.props.falseMediaRecorderSupported()
+    }
   }
 }

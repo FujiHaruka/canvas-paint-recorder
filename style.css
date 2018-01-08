@@ -34,11 +34,29 @@ h1, h2, h3, h4, h5 {
 }
 
 .PaintToolbar {
-	margin-top: 8px;
+	display: flex;
+	margin-top: 12px;
 	width: 100%;
 }
 
 .PaintToolbar-button {
 	display: inline-block;
 	margin-right: 8px;
+}
+
+.PaintToolbar-message {
+	display: inline-block;
+	position: relative;
+	font-size: 0.9em;
+	height: 36px;
+	color: #e27171;
+}
+.PaintToolbar-message-inner {
+	position: absolute;
+	bottom: 3px;
+}
+
+.NotSupportedMessage {
+	line-height: 1.2em;
+	color: red;
 }

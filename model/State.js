@@ -10,7 +10,8 @@ const Canvas = withStateHandlers(
     prevX: 0,
     prevY: 0,
     clearing: false,
-    recording: false
+    recording: false,
+    isMediaRecorderSupported: true
   }),
   {
     toggleDrawing: updater('drawing'),
@@ -19,7 +20,8 @@ const Canvas = withStateHandlers(
     clearStart: (state) => () => ({clearing: true}),
     clearDone: (state) => () => ({clearing: false}),
     recordStart: (state) => () => ({recording: true}),
-    recordFinish: (state) => () => ({recording: false})
+    recordFinish: (state) => () => ({recording: false}),
+    falseMediaRecorderSupported: () => () => ({isMediaRecorderSupported: false})
   }
 )
 
