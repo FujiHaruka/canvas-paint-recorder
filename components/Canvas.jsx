@@ -7,17 +7,23 @@ const enabledOfRecording = enabledOf('recording')
 const disabledOfRecording = disabledOf('recording')
 
 class Canvas extends Component {
-  render (props) {
+  render ({
+    canvasWidth,
+    canvasHeight
+  }) {
     return (
-      <canvas
-        id='paint-canvas'
-        width={500}
-        height={500}
-        ref={(c) => { this.canvas = c }}
-        onMouseDown={this.onMouseDown}
-        onMouseUp={this.onMouseUp}
-        onMouseMove={this.onMouseMove}
-      />
+      <div class='Canvas-wrap' onMouseUp={this.updateCanvasSize} style={{width: `${canvasWidth}px`, height: `${canvasHeight}px`}}>
+        <canvas
+          id='paint-canvas'
+          width={canvasWidth - 8}
+          height={canvasHeight - 8}
+          ref={(c) => { this.canvas = c }}
+          onMouseDown={this.startDrawing}
+          onMouseUp={this.finishDrawing}
+          onMouseMove={this.keepDrawing}
+          onMouseLeave={this.finishDrawing}
+        />
+      </div>
     )
   }
 
@@ -41,7 +47,7 @@ class Canvas extends Component {
     }
   }
 
-  onMouseDown = (e) => {
+  startDrawing = (e) => {
     const {toggleDrawing, setPrevCoord} = this.props
     const {top, left} = e.target.getBoundingClientRect()
     const coord = {
@@ -52,12 +58,15 @@ class Canvas extends Component {
     toggleDrawing(true)
   }
 
-  onMouseUp = () => {
-    const {toggleDrawing} = this.props
-    toggleDrawing(false)
+  finishDrawing = (e) => {
+    // e.stopPropagation()
+    const {toggleDrawing, drawing} = this.props
+    if (drawing) {
+      toggleDrawing(false)
+    }
   }
 
-  onMouseMove = (e) => {
+  keepDrawing = (e) => {
     const {drawing, setPrevCoord, prevX, prevY} = this.props
     if (!drawing) {
       return
@@ -73,6 +82,15 @@ class Canvas extends Component {
     }
     this.drawLine(prevCoord, coord)
     setPrevCoord(coord)
+  }
+
+  updateCanvasSize = (e) => {
+    const {width: w, height: h} = e.currentTarget.getBoundingClientRect()
+    const {canvasWidth, canvasHeight} = this.props
+    const shouldUpdate = Math.abs(w - canvasWidth) > 4 || Math.abs(h - canvasHeight) > 4
+    if (shouldUpdate) {
+      this.props.resizeCanvas({w, h})
+    }
   }
 
   drawLine (from, to) {

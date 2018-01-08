@@ -1,3 +1,4 @@
+import {pure} from 'recompose'
 import Button from 'preact-material-components/Button'
 
 const PaintToolbar = ({clearStart, recordStart, recordFinish, recording}) => (
@@ -15,4 +16,4 @@ const PaintToolbar = ({clearStart, recordStart, recordFinish, recording}) => (
   </div>
 )
 
-export default PaintToolbar
+export default pure(PaintToolbar)
