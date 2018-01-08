@@ -59,7 +59,6 @@ class Canvas extends Component {
   }
 
   finishDrawing = (e) => {
-    // e.stopPropagation()
     const {toggleDrawing, drawing} = this.props
     if (drawing) {
       toggleDrawing(false)
@@ -96,8 +95,8 @@ class Canvas extends Component {
   drawLine (from, to) {
     const ctx = this.canvasCtx
     ctx.lineCap = 'round'
-    ctx.strokeStyle = 'black'
-    ctx.lineWidth = 3
+    ctx.strokeStyle = '#222'
+    ctx.lineWidth = 2
     ctx.beginPath()
     ctx.moveTo(from.x, from.y)
     ctx.lineTo(to.x, to.y)
@@ -136,8 +135,9 @@ class Canvas extends Component {
       const dataUrl = URL.createObjectURL(blob)
       // download
       const anchor = document.createElement('a')
+      const now = new Date()
       anchor.href = dataUrl
-      anchor.download = 'canvas.webm'
+      anchor.download = `canvas_${now.getFullYear()}_${now.getMonth() + 1}_${now.getDate()}_${now.getHours()}_${now.getMinutes()}_${now.getSeconds()}.webm`
       anchor.click()
       // clean up
       this.recordedBlobs = []
