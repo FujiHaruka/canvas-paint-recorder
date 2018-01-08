@@ -5,11 +5,14 @@
 'use strict'
 
 import Canvas from './Canvas'
+import PaintToolbar from './PaintToolbar'
 
 export {
-  Canvas
+  Canvas,
+  PaintToolbar
 }
 
 export default {
-    Canvas
+    Canvas,
+    PaintToolbar
 }

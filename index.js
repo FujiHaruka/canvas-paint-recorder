@@ -1,7 +1,10 @@
 import './style'
+import 'preact-material-components/Button/style.css'
+import 'preact-material-components/Theme/style.css'
 import { Component } from 'preact'
-import State from './State'
+import State from './model/State'
 import {
+  PaintToolbar,
   Canvas
 } from './components'
 
@@ -11,13 +14,17 @@ export default class App extends Component {
     drawing,
     prevX,
     prevY,
+    clearStarted,
     // -- handlers --
     toggleDrawing,
-    setPrevCoord
+    setPrevCoord,
+    clearStart,
+    clearDone
   }) {
     return (
-      <div>
-        <Canvas {...{drawing, prevX, prevY, toggleDrawing, setPrevCoord}} />
+      <div class='App'>
+        <PaintToolbar {...{clearStart}} />
+        <Canvas {...{drawing, prevX, prevY, toggleDrawing, setPrevCoord, clearStarted, clearDone}} />
       </div>
     )
   }
