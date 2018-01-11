@@ -6,6 +6,8 @@ const enabledOfClearing = enabledOf('clearing')
 const enabledOfRecording = enabledOf('recording')
 const disabledOfRecording = disabledOf('recording')
 
+const SKIP_FOR_SMOOTH = 4
+
 class Canvas extends Component {
   render ({
     canvasWidth,
@@ -23,12 +25,19 @@ class Canvas extends Component {
           onMouseMove={this.keepDrawing}
           onMouseLeave={this.finishDrawing}
         />
+        <canvas
+          id='paint-canvas-hidden'
+          width={canvasWidth - 8}
+          height={canvasHeight - 8}
+          ref={(c) => { this.hiddenCanvas = c }}
+        />
       </div>
     )
   }
 
   componentDidMount () {
     this.canvasCtx = this.canvas.getContext('2d')
+    this.hiddenCanvasCtx = this.hiddenCanvas.getContext('2d')
     this.recordedBlobs = []
     this.clear()
   }
@@ -48,7 +57,7 @@ class Canvas extends Component {
   }
 
   startDrawing = (e) => {
-    const {toggleDrawing, setPrevCoord} = this.props
+    const {toggleDrawing, setPrevCoord, clearCoords, pushCoords} = this.props
     const {top, left} = e.target.getBoundingClientRect()
     const coord = {
       x: e.clientX - left,
@@ -56,17 +65,22 @@ class Canvas extends Component {
     }
     setPrevCoord(coord)
     toggleDrawing(true)
+    clearCoords()
+    pushCoords(coord)
+    this.saveCanvasState()
   }
 
   finishDrawing = (e) => {
-    const {toggleDrawing, drawing} = this.props
+    const {toggleDrawing, drawing, clearCoords} = this.props
     if (drawing) {
       toggleDrawing(false)
+      this.replaceSmoothCurve()
+      clearCoords()
     }
   }
 
   keepDrawing = (e) => {
-    const {drawing, setPrevCoord, prevX, prevY} = this.props
+    const {drawing, setPrevCoord, prevX, prevY, pushCoords} = this.props
     if (!drawing) {
       return
     }
@@ -81,6 +95,7 @@ class Canvas extends Component {
     }
     this.drawLine(prevCoord, coord)
     setPrevCoord(coord)
+    pushCoords(coord)
   }
 
   updateCanvasSize = (e) => {
@@ -108,8 +123,10 @@ class Canvas extends Component {
     const {width, height} = this.canvas
     const ctx = this.canvasCtx
     // fill white
+    ctx.clearRect(0, 0, width, height)
     ctx.fillStyle = '#fff'
     ctx.fillRect(0, 0, width, height)
+    this.saveCanvasState()
   }
 
   startRecord () {
@@ -144,6 +161,31 @@ class Canvas extends Component {
       this.mediaRecorder = null
     }
     mediaRecorder.stop()
+  }
+
+  saveCanvasState () {
+    const {canvas, canvasCtx, hiddenCanvasCtx} = this
+    const {width, height} = canvas
+    const img = canvasCtx.getImageData(0, 0, width, height)
+    hiddenCanvasCtx.putImageData(img, 0, 0)
+  }
+
+  replaceSmoothCurve () {
+    const {canvas, canvasCtx, hiddenCanvasCtx: ctx} = this
+    const {coords} = this.props
+    const skip = SKIP_FOR_SMOOTH * 2
+    const points = coords.filter((a, i, array) => i % skip === 0 || i % skip === 1 || i === array.length - 1 || i === array.length - 2)
+    ctx.lineCap = 'round'
+    ctx.strokeStyle = '#222'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(coords[0], coords[1])
+    ctx.curve(points, 0.5)
+    ctx.stroke()
+    ctx.closePath()
+    const {width, height} = canvas
+    const img = ctx.getImageData(0, 0, width, height)
+    canvasCtx.putImageData(img, 0, 0)
   }
 }
 

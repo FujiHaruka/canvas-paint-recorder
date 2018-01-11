@@ -11,7 +11,8 @@ const Canvas = withStateHandlers(
     prevY: 0,
     clearing: false,
     recording: false,
-    isMediaRecorderSupported: true
+    isMediaRecorderSupported: true,
+    coords: []
   }),
   {
     toggleDrawing: updater('drawing'),
@@ -21,7 +22,9 @@ const Canvas = withStateHandlers(
     clearDone: (state) => () => ({clearing: false}),
     recordStart: (state) => () => ({recording: true}),
     recordFinish: (state) => () => ({recording: false}),
-    falseMediaRecorderSupported: () => () => ({isMediaRecorderSupported: false})
+    falseMediaRecorderSupported: () => () => ({isMediaRecorderSupported: false}),
+    pushCoords: ({coords}) => ({x, y}) => ({coords: coords.concat(x, y)}),
+    clearCoords: (state) => () => ({coords: []})
   }
 )
 

@@ -23,9 +23,18 @@ h1, h2, h3, h4, h5 {
 }
 
 #paint-canvas {
+	position: relative;
+	z-index: 1;
+}
+#paint-canvas-hidden {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
 }
 
 .Canvas-wrap {
+	position: relative;
 	overflow: hidden;
 	margin-top: 6px;
 	border: 1px solid #aaa;

@@ -1,0 +1,5 @@
+/*	Curve extension for canvas 2.2
+ *	Epistemex (c) 2013-2014
+ *	License: MIT
+*/
+CanvasRenderingContext2D.prototype.curve=function(h,r,f,c){r=(typeof r==="number")?r:0.5;f=f?f:20;var j,k=[],e=h.length,d,a=new Float32Array((f+2)*4),b=4;j=h.slice(0);if(c){j.unshift(h[e-1]);j.unshift(h[e-2]);j.push(h[0],h[1])}else{j.unshift(h[1]);j.unshift(h[0]);j.push(h[e-2],h[e-1])}a[0]=1;for(d=1;d<f;d++){var m=d/f,n=m*m,p=n*m,o=p*2,q=n*3;a[b++]=o-q+1;a[b++]=q-o;a[b++]=p-2*n+m;a[b++]=p-n}a[++b]=1;g(j,a,e);if(c){j=[];j.push(h[e-4],h[e-3],h[e-2],h[e-1]);j.push(h[0],h[1],h[2],h[3]);g(j,a,4)}function g(B,u,w){for(var v=2;v<w;v+=2){var x=B[v],y=B[v+1],z=B[v+2],A=B[v+3],D=(z-B[v-2])*r,E=(A-B[v-1])*r,F=(B[v+4]-x)*r,G=(B[v+5]-y)*r;for(var C=0;C<=f;C++){var s=C*4;k.push(u[s]*x+u[s+1]*z+u[s+2]*D+u[s+3]*F,u[s]*y+u[s+1]*A+u[s+2]*E+u[s+3]*G)}}}for(d=0,e=k.length;d<e;d+=2){this.lineTo(k[d],k[d+1])}return k};

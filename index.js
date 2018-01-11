@@ -1,4 +1,5 @@
 import './style'
+import './curve.min.js'
 import 'preact-material-components/Button/style.css'
 import 'preact-material-components/Toolbar/style.css'
 import {Component} from 'preact'
@@ -21,6 +22,7 @@ export default class App extends Component {
     clearing,
     recording,
     isMediaRecorderSupported,
+    coords,
     // -- handlers --
     toggleDrawing,
     setPrevCoord,
@@ -28,7 +30,9 @@ export default class App extends Component {
     clearStart,
     clearDone,
     recordStart,
-    recordFinish
+    recordFinish,
+    pushCoords,
+    clearCoords
   }) {
     return (
       <div class='App'>
@@ -53,6 +57,9 @@ export default class App extends Component {
             setPrevCoord,
             clearing,
             clearDone,
+            coords,
+            pushCoords,
+            clearCoords,
             recording}}
           />
         </div>
